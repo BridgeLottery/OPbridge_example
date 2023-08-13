@@ -1,4 +1,4 @@
-# <div align="center">🎈 BridgeLottery Exemple on Optimism Bridge 🔴</div>
+# <div align="center">🎈 BridgeLottery Example on Optimism Bridge 🔴</div>
 
 ```
 888888b.           d8b      888                   888              888    888                             

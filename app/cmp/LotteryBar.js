@@ -1,7 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
-import DepositorABI from './ABI/ABIdepositor.json'
 
 
 const LotteryBar = () => {
@@ -10,29 +8,15 @@ const LotteryBar = () => {
     const [index, setIndex] = useState('0');
     const [winner, setWinner] = useState('No winner yet!');
     const [showModal, setShowModal] = useState(false);
-    const [contractForFront, setContractForFront] = useState('0x0000000000000000000000000000000000000000')
 
     const fetchVariableValue = async () => {
         try {
             const response = await fetch('http://localhost:3001/getInfos');
             const data = await response.json();
             setTimeValue(data.subscriptionDurationInSeconds.toString());
-            setIndex(data.index.toString());
+            setIndex(data.addressEligible.toString());
         } catch (error) {
             console.error('Error fetching variable:', error);
-        }
-    };
-
-    const fetchIndexFromContract = async () => {
-        try {
-            setContractForFront(data.contractForFront)
-            const web3 = new Web3('https://rpc.sepolia.org');
-            let contract = new web3.eth.Contract(DepositorABI, contractForFront);
-            let indexValue = await contract.methods.index().call();
-            console.log(contractForFront)
-            setIndex(indexValue.toString());
-        } catch (error) {
-            console.error('Error fetching index from contract:', error);
         }
     };
 
@@ -48,12 +32,10 @@ const LotteryBar = () => {
 
     useEffect(() => {
         fetchVariableValue();
-        fetchIndexFromContract();
         fetchWinnerFromServer();
 
         const interval = setInterval(() => {
             fetchVariableValue();
-            fetchIndexFromContract();
             fetchWinnerFromServer();
         }, 1000);
 
@@ -71,7 +53,7 @@ const LotteryBar = () => {
                     <p className='text-sm font-semibold bg-nav rounded-xl px-2 py-2'><span className='flex items-center justify-center'>🎈 Bridge Lottery Running for ➜ <span className='px-2 text-xs'>{timeValue === '0' ? 'Finished!' : `${timeValue + 's'}`}</span></span></p>
                     <p className='text-sm font-semibold bg-nav rounded-xl px-2 py-2'><span className='flex items-center justify-center'>👥 Total Address Eligible ➜ <span className='px-2 text-xs'>{index}</span></span></p>
                     <p className='text-sm font-semibold bg-nav rounded-xl px-2 py-2'><span className='flex items-center justify-center'>🏆 Winner ➜ <span className='px-2 text-xs'><a href={`https://blockscan.com/address/${winner}`} className=' underline'> {winner}</a></span></span></p>
-                    <button className='text-sm font-semibold bg-nav rounded-xl px-2 py-2' onClick={toggleModal}>📖 How it work?</button>
+                    <button className='text-sm font-semibold bg-nav rounded-xl px-2 py-2' onClick={toggleModal}>📖 How it works?</button>
                 </div>
             </div>
             {showModal && (
